@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMEAL - Orders</title>
+  <link rel="stylesheet" href="order.css">
+  <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <button onclick="history.back()">⬅</button>
+    <h2>My Orders</h2>
+    <a href="notifications.html">🔔</a>
+  </header>
+
+  <!-- Orders Section -->
+  <main class="orders">
+    <div class="order-header">
+      <span>Order Item</span>
+      <span>Pick-up Time</span>
+      <span>Status</span>
+    </div>
+    <div id="order-list"></div>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html">🍽 Menu</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="order.html" class="active">📦 Order</a>
+    <a href="profile.html">👤 Profile</a>
+  </nav>
+
+  <script>
+  const currentUser = localStorage.getItem("currentUser") || "guest";
+  let orders = JSON.parse(localStorage.getItem("orders_" + currentUser)) || [];
+  let allOrders = JSON.parse(localStorage.getItem("allOrders")) || [];
+
+  function renderOrders() {
+    const container = document.getElementById("order-list");
+    container.innerHTML = "";
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p>No orders found.</p>";
+      return;
+    }
+
+    orders.forEach((order, index) => {
+      let orderTime = new Date(order.placedAt);
+      let nowPH = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" }));
+
+      let minutesPassed = Math.floor((nowPH - orderTime) / 60000);
+      let allowCancel = minutesPassed < 15 && order.status === "Pending";
+
+      // Auto update to Ready if pickup time has arrived
+      if (minutesPassed >= 15 && order.status === "Pending") {
+        order.status = "Ready";
+        localStorage.setItem("orders_" + currentUser, JSON.stringify(orders));
+      }
+
+      container.innerHTML += `
+        <div class="order-card">
+          <img src="${order.img}" alt="${order.name}">
+          <div class="order-info">
+            <h3>${order.name}</h3>
+            <p>₱${order.price} × ${order.quantity ?? 1} = 
+               <strong>₱${order.price * (order.quantity ?? 1)}</strong></p>
+            <small><strong>Order Code:</strong> ${order.code || "N/A"}</small><br>
+            <small>Placed At: ${orderTime.toLocaleString("en-PH", { 
+              timeZone: "Asia/Manila", 
+              dateStyle: "medium", 
+              timeStyle: "short" 
+            })}</small>
+          </div>
+          <span class="pickup-time">${order.time || "Not set"}</span>
+          <span class="status ${order.status}">${order.status}</span>
+          ${allowCancel ? `<button class="cancel-btn" onclick="cancelOrder(${index})">✖</button>` : ""}
+        </div>
+      `;
+    });
+  }
+
+  function cancelOrder(index) {
+    let orderTime = new Date(orders[index].placedAt);
+    let nowPH = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Manila" }));
+    let minutesPassed = Math.floor((nowPH - orderTime) / 60000);
+
+    if (minutesPassed >= 15) {
+      alert("❌ Cancellation time limit has passed. Order can no longer be cancelled.");
+      return;
+    }
+
+    let confirmCancel = confirm("Are you sure you want to cancel this order?");
+    if (confirmCancel) {
+      // ✅ Save cancelled order to walkinOrders
+      let cancelledOrder = orders[index];
+      cancelledOrder.status = "Cancelled";
+
+      let walkinOrders = JSON.parse(localStorage.getItem("walkinOrders")) || [];
+      walkinOrders.push(cancelledOrder);
+      localStorage.setItem("walkinOrders", JSON.stringify(walkinOrders));
+
+      // ✅ Remove from user orders
+      orders.splice(index, 1);
+      localStorage.setItem("orders_" + currentUser, JSON.stringify(orders));
+
+      // ✅ Update global allOrders
+      allOrders = allOrders.filter(o => o.user !== currentUser);
+      allOrders = allOrders.concat(orders);
+      localStorage.setItem("allOrders", JSON.stringify(allOrders));
+
+      renderOrders();
+    }
+  }
+
+  renderOrders();
+</script>
+
+</body>
+</html>

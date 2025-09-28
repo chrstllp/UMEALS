@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMEAL - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-body">
+
+  <!-- Login Page -->
+  <div class="login-container">
+    <h1 class="brand">UMEAL</h1>
+    <img src="logooo.jfif" alt="UMEAL" class="school-logo">
+
+    <!-- Login Form -->
+    <form id="loginForm" class="login-form">
+      <label for="idnumber">ID NUMBER</label>
+      <input type="text" id="idnumber" placeholder="Enter ID Number" required>
+
+      <label for="password">PASSWORD</label>
+      <input type="password" id="password" placeholder="Enter Password" required>
+
+      <button type="submit" class="btn">Log in</button>
+
+      <a href="forgot.html" class="forgot">Forgot Password?</a>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault(); // stop page reload
+
+      const idnumber = document.getElementById("idnumber").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if(idnumber && password){
+        // ✅ Save ID to localStorage as currentUser
+        localStorage.setItem("currentUser", idnumber);
+
+        // Redirect to WELCOME PAGE first (not dashboard directly)
+        window.location.href = "welcome.html";
+      } else {
+        alert("Please enter your ID and password.");
+      }
+    });
+  </script>
+
+</body>
+</html>

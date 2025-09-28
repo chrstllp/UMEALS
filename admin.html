@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMEAL - Staff Panel</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .order-card {border:1px solid #ccc;padding:10px;margin:10px;border-radius:8px;}
+    .btn {padding:5px 10px;margin:5px;cursor:pointer;border:none;border-radius:5px;}
+    .ready {background:orange;color:#fff;}
+    .claimed {background:gray;color:#fff;}
+    .delete {background:red;color:#fff;}
+  </style>
+</head>
+<body>
+  <h2>Staff Panel - Manage Orders</h2>
+  <div id="staff-orders"></div>
+
+  <script>
+  // ✅ Collect all orders from all users
+  function loadAllOrders() {
+    let allOrders = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      let key = localStorage.key(i);
+      if (key.startsWith("orders_")) {
+        let userOrders = JSON.parse(localStorage.getItem(key)) || [];
+        userOrders.forEach(o => {
+          o._userKey = key; // remember which user this order belongs to
+        });
+        allOrders = allOrders.concat(userOrders);
+      }
+    }
+    return allOrders;
+  }
+
+  let allOrders = loadAllOrders();
+
+  function renderStaffOrders() {
+    const container = document.getElementById("staff-orders");
+    container.innerHTML = "";
+
+    if (allOrders.length === 0) {
+      container.innerHTML = "<p>No orders found.</p>";
+      return;
+    }
+
+    allOrders.forEach((order, index) => {
+      container.innerHTML += `
+        <div class="order-card">
+          <img src="${order.img}" alt="${order.name}" width="50">
+          <strong>${order.name}</strong> (${order.quantity}) - ₱${order.price * order.quantity}<br>
+          <small><strong>Order Code:</strong> ${order.code || "N/A"}</small><br>
+          <small>Status: ${order.status}</small><br>
+          <button class="btn ready" onclick="markReady(${index})">Mark Ready</button>
+          <button class="btn claimed" onclick="markClaimed(${index})">Mark Claimed</button>
+          <button class="btn delete" onclick="deleteOrder(${index})">Delete</button>
+        </div>
+      `;
+    });
+  }
+
+  function updateOrder(index, newStatus) {
+    allOrders[index].status = newStatus;
+    save(allOrders[index]._userKey);
+  }
+
+  function markReady(i){ updateOrder(i, "Ready"); }
+  function markClaimed(i){ updateOrder(i, "Claimed"); }
+  function deleteOrder(i){
+    const userKey = allOrders[i]._userKey;
+    allOrders.splice(i,1);
+    save(userKey);
+  }
+
+  function save(userKey){
+    let userOrders = allOrders.filter(o => o._userKey === userKey);
+    localStorage.setItem(userKey, JSON.stringify(userOrders));
+    allOrders = loadAllOrders(); 
+    renderStaffOrders();
+  }
+
+  renderStaffOrders();
+  </script>
+</body>
+</html>

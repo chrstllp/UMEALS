@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMEAL - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="cart.html">
+  <link rel="stylesheet" href="order.html">
+  <style>
+    .categories button.active {
+      background-color: red;
+      color: #fff;
+    }
+    /* 🔹 Walk-in Section Styles */
+    .walkin-section {
+      margin: 20px;
+      padding: 10px;
+      border-top: 2px solid #ccc;
+    }
+    .walkin-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+      margin: 8px 0;
+      background: #fafafa;
+    }
+    .walkin-card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      margin-right: 10px;
+    }
+    .walkin-info {
+      flex-grow: 1;
+    }
+    .walkin-info h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .walkin-info p {
+      margin: 3px 0;
+      font-size: 14px;
+    }
+    .claim-btn {
+      padding: 5px 10px;
+      background: green;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .claim-btn:disabled {
+      background: gray;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body class="dashboard-body">
+
+  <!-- Top Bar -->
+  <header class="top-bar">
+    <div class="user-info">
+      <img src="Profile.jfif" alt="User" class="avatar">
+      <span>Hello, Welcome!</span>
+    </div>
+    <div class="icons">
+      <a href="notifications.html" class="bell">🔔</a>
+    </div>
+  </header>
+
+  <!-- Dashboard Content -->
+  <main class="dashboard">
+    <h2>What would you like to have today?</h2>
+
+    <!-- 🔎 Search Bar -->
+    <div style="margin: 15px 0; text-align: center;">
+      <input 
+        type="text" 
+        id="searchBar" 
+        placeholder="Search food..." 
+        style="width: 80%; padding: 8px; font-size: 14px; border: 1px solid #ccc; border-radius: 5px;">
+    </div>
+
+    <!-- Categories -->
+    <h3 class="cat-title">Categories</h3>
+    <div class="categories">
+      <button class="active" onclick="filterMenu('all', this)">All</button>
+      <button onclick="filterMenu('lunch', this)">Lunch Meals</button>
+      <button onclick="filterMenu('snacks', this)">Snacks</button>
+      <button onclick="filterMenu('drinks', this)">Drinks</button>
+    </div>
+
+    <div class="food-grid">
+      <!-- Lunch -->
+      <div class="food-card lunch">
+        <img src="rice.jpg" alt="Rice">
+        <h3>Rice</h3>
+        <p>₱10</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card lunch">
+        <img src="pork giniling.jpg" alt="Pork Giniling">
+        <h3>Pork Giniling</h3>
+        <p>₱40</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+
+      <div class="food-card lunch">
+        <img src="menudo.jfif" alt="Menudo">
+        <h3>Menudo</h3>
+        <p>₱50</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card lunch">
+        <img src="monggos.jpg" alt="Monggos">
+        <h3>Monggos</h3>
+        <p>₱30</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card lunch">
+        <img src="fried chicken.jfif" alt="Fried Chicken">
+        <h3>Fried Chicken</h3>
+        <p>₱35</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card lunch">
+        <img src="kaldereta.jfif" alt="Kaldereta">
+        <h3>Caldereta</h3>
+        <p>₱50</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card lunch">
+        <img src="ginataan.jfif" alt="Ginataan">
+        <h3>Ginataan</h3>
+        <p>₱30</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+
+      <!-- Snacks -->
+      <div class="food-card snacks">
+        <img src="sandwich.webp" alt="Sandwich">
+        <h3>Sandwich</h3>
+        <p>₱25</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card snacks">
+        <img src="casava cake.jpg" alt="Casava Cake">
+        <h3>Casava Cake</h3>
+        <p>₱15</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card snacks">
+        <img src="banana cue.jfif" alt="Banana Cue">
+        <h3>Banana Cue</h3>
+        <p>₱10</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card snacks">
+        <img src="turon.jfif" alt="Turon">
+        <h3>Turon</h3>
+        <p>₱15</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+
+      <!-- Drinks -->
+      <div class="food-card drinks">
+        <img src="water.jfif" alt="Water">
+        <h3>Water</h3>
+        <p>₱15</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card drinks">
+        <img src="sprite.webp" alt="Sprite">
+        <h3>Sprite</h3>
+        <p>₱15</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card drinks">
+        <img src="royal.webp" alt="Royal">
+        <h3>Royal</h3>
+        <p>₱15</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card drinks">
+        <img src="c2.jpg" alt="C2">
+        <h3>C2</h3>
+        <p>₱18</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card drinks">
+        <img src="icedd tea.webp" alt="Iced Tea">
+        <h3>Iced Tea</h3>
+        <p>₱18</p>
+        <button class="btn-small" onclick="location.href='cart.html'">Add +</button>
+      </div>
+      <div class="food-card drinks">
+        <img src="cooke.webp" alt="Softdrinks">
+        <h3>Coke</h3>
+        <p>₱15</p>
+        <button class="btn-small">Add +</button>
+      </div>
+    </div> <!-- end food-grid -->
+
+    <!-- 🔹 Walk-in Orders Section -->
+    <section class="walkin-section">
+      <h3>Walk-in Orders (Available to Claim)</h3>
+      <div id="walkin-list"></div>
+    </section>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <a href="dashboard.html" class="active">🍽 Food</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="orders.html">📦 Order</a>
+    <a href="profile.html">👤 Profile</a>
+  </nav>
+
+  <!-- Scripts -->
+<script>
+const addButtons = document.querySelectorAll('.food-card .btn-small');
+
+addButtons.forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    const card = this.parentElement;
+    const item = {
+      name: card.querySelector('h3').innerText,
+      price: parseFloat(card.querySelector('p').innerText.replace('₱','')),
+      img: card.querySelector('img').src,
+      quantity: 1
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existing = cart.find(i => i.name === item.name);
+    if(existing){
+      existing.quantity += 1;
+    } else {
+      cart.push(item);
+    }
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert(item.name + " added to cart!");
+  });
+});
+</script>
+
+<script>
+function filterMenu(category, btn) {
+  const allButtons = document.querySelectorAll('.categories button');
+  allButtons.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const items = document.querySelectorAll('.food-card');
+  items.forEach(item => {
+    if(category === 'all'){
+      item.style.display = 'block';
+    } else {
+      item.style.display = item.classList.contains(category) ? 'block' : 'none';
+    }
+  });
+}
+</script>
+
+<script>
+const searchBar = document.getElementById("searchBar");
+const foodCards = document.querySelectorAll(".food-card");
+const foodGrid = document.querySelector(".food-grid");
+
+searchBar.addEventListener("keyup", function() {
+  const searchText = searchBar.value.toLowerCase();
+  let found = false;
+
+  foodCards.forEach(card => {
+    const foodName = card.querySelector("h3").innerText.toLowerCase();
+    if(foodName.includes(searchText) && searchText !== ""){
+      card.style.display = "block";
+      found = true;
+    } else if (searchText === "") {
+      card.style.display = "block";
+    } else {
+      card.style.display = "none";
+    }
+  });
+
+  let notAvailable = document.getElementById("notAvailableMessage");
+  if(!found && searchText !== ""){
+    if(!notAvailable){
+      notAvailable = document.createElement("div");
+      notAvailable.id = "notAvailableMessage";
+      notAvailable.textContent = "Not Available";
+      notAvailable.style.color = "red";
+      notAvailable.style.fontWeight = "bold";
+      notAvailable.style.marginTop = "10px";
+      foodGrid.appendChild(notAvailable);
+    }
+  } else {
+    if(notAvailable){
+      notAvailable.remove();
+    }
+  }
+});
+</script>
+
+<!-- 🔹 Walk-in Orders Logic -->
+<script>
+function renderWalkins() {
+  const list = document.getElementById("walkin-list");
+  list.innerHTML = "";
+
+  let allWalkins = JSON.parse(localStorage.getItem("walkinOrders")) || [];
+
+  if(allWalkins.length === 0){
+    list.innerHTML = "<p>No walk-in orders available.</p>";
+    return;
+  }
+
+  allWalkins.forEach((order, index) => {
+    list.innerHTML += `
+      <div class="walkin-card">
+        <img src="${order.img}" alt="${order.name}">
+        <div class="walkin-info">
+          <h4>${order.name}</h4>
+          <p>₱${order.price} × ${order.quantity} = <strong>₱${order.price * order.quantity}</strong></p>
+          <small>Status: ${order.status}</small>
+        </div>
+        <button class="claim-btn" onclick="claimWalkin(${index})">Claim</button>
+      </div>
+    `;
+  });
+}
+
+function claimWalkin(index) {
+  let allWalkins = JSON.parse(localStorage.getItem("walkinOrders")) || [];
+  const order = allWalkins[index];
+
+  if(!order) return;
+
+  const currentUser = localStorage.getItem("currentUser") || "guest";
+  let myOrders = JSON.parse(localStorage.getItem("orders_" + currentUser)) || [];
+  myOrders.push({...order, status: "Claimed"});
+  localStorage.setItem("orders_" + currentUser, JSON.stringify(myOrders));
+
+  allWalkins.splice(index, 1);
+  localStorage.setItem("walkinOrders", JSON.stringify(allWalkins));
+
+  alert("You claimed " + order.name);
+  renderWalkins();
+}
+
+renderWalkins();
+</script>
+
+</body>
+</html>
